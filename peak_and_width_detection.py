@@ -87,31 +87,31 @@ def detect_peaks(x, y, height_thresh=0, plot=False):
 # To test the code
 if __name__ == "__main__":
     from chromatogram_given_profile import plot_chromatogram_given_gradient_profile
-    from crf import crf
+    from crf import crf, capped_sum_of_resolutions
 
     # Well separated sample, essentially tRs = peaks, widths_pred = widths
-    tRs = [11, 14, 20, 34,  44, 50, 56]
+    tRs = np.array([11, 14, 20, 34,  44, 50, 65])
     widths_pred = np.array([1, 2, 2.5, 3, 4, 3, 2])
-    x, y = create_signal(tRs, widths_pred, 60)
+    x, y = create_signal(tRs, widths_pred, 70)
 
     peaks, widths = detect_peaks(x,y,height_thresh=0, plot=True)
 
-    print(tRs, widths_pred)
-    print(peaks, widths)
+    #print(tRs, widths_pred)
+    #print(peaks, widths)
 
-    print(crf(tRs, widths_pred, [0, 0.5]))
-    print(crf(peaks, widths, [0, 0.5]))
+    print(capped_sum_of_resolutions(tRs, widths_pred, [0, 0.5]))
+    print(capped_sum_of_resolutions(peaks, widths, [0, 0.5]))
 
     # Poorly separated sample, essentially tRs != peaks, widths_pred != widths
-    tRs = [11, 14, 20, 34,  44, 50, 56]
-    widths_pred = np.array([1, 2, 2.5, 3, 4, 3, 2])*4
-    x, y = create_signal(tRs, widths_pred, 60)
+    tRs = np.array([11, 14, 20, 34,  44, 50, 65])
+    widths_pred = np.array([1, 2, 2.5, 3, 4, 3, 2])*2
+    x, y = create_signal(tRs, widths_pred, 70)
 
     peaks, widths = detect_peaks(x,y,height_thresh=0, plot=True)
 
-    print(tRs, widths_pred)
-    print(peaks, widths)
+    # print(tRs, widths_pred)
+    # print(peaks, widths)
 
-    print(crf(tRs, widths_pred, [0, 0.5]))
-    print(crf(peaks, widths, [0, 0.5]))
+    print(capped_sum_of_resolutions(tRs, widths_pred, [0, 0.5]))
+    print(capped_sum_of_resolutions(peaks, widths, [0, 0.5]))
 

@@ -92,3 +92,50 @@ def crf(retention_times, peak_widths, phi_list):
         return(0.8 * score)
 
     return(score)
+
+def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_time=60, min_res=1, max_res=1.5):
+    """
+    Resolution equation as defined in eq. 5 and 6 of
+     https://chemrxiv.org/engage/chemrxiv/article-details/62e2a383e7fc8f9e388caabc
+    Uses symmetric resolution equation.
+
+    :param retention_times: ndarray containing retention_times
+    :param peak_widths: ndarray containing peak widths
+    :param phi_list: list of phi points
+    :param max_time: int maximum allowed time
+    :param min_res: float minimum required resolution
+    :param max_res: float maximum required resolution
+    :return: score
+    """
+
+    N = len(retention_times)
+
+    resolutions = np.zeros(len(retention_times))
+
+    mask = retention_times < max_time
+    for i in range(N - 1):
+        # check if tR1 is later then max_time, if yes we can stop
+        tR1 = retention_times[i]
+        tR2 = retention_times[i+1]
+        W1 = peak_widths[i]
+        W2 = peak_widths[i+1]
+
+        resolutions[i] = resolution(tR1, tR2, W1, W2)
+        if resolutions[i] < min_res:
+            resolutions[i]=0
+        if min_res > resolutions[i] > max_res:
+            resolutions[i] = resolutions[i]/max_res
+        if resolutions[i] > max_res:
+            resolutions[i]=1
+
+    # zero out scores of peaks that have eluted after max_time
+    resolutions = resolutions*mask
+
+    score = resolutions.sum()
+    # Optional penalty for gradient segments with negative slope
+    # Comment out to remove penalty:
+    if phi_list is not None:
+        if(sorted(phi_list) != phi_list):
+            return(0.8 * score)
+
+    return(score)
