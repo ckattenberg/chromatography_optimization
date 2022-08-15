@@ -78,7 +78,7 @@ def interface(chromosome):
 
     # Calculate crf
     score = crf(tR_list, W_list, phi_list)
-    return(score)
+    return(-1 * score)
 
 
 # Input has to be a numpy array

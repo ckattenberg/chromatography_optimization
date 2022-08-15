@@ -37,7 +37,7 @@ def bayesopt(iters, segments):
     start_time = time.time()
 
     # Run Bayesian optimization
-    res, runtime_per_iteration = gp_minimize(
+    res, runtimes_cumulative = gp_minimize(
                       interface,                # the function to minimize
                       bounds,                   # the bounds on each dimension of x
                       acq_func="EI",            # the acquisition function
@@ -47,8 +47,9 @@ def bayesopt(iters, segments):
     # Record ending time
     runtime = time.time() - start_time
 
-    res.func_vals = [-1 * score for score in res.func_vals]
-    return_list = [iters, runtime, -res.fun, list(res.x), res.func_vals]
+    func_vals = [-1 * score for score in res.func_vals]
+    return_list = [iters, runtime, -res.fun, list(res.x), func_vals, runtimes_cumulative]
+    print(return_list)
     return(return_list)
 
 
