@@ -2,7 +2,7 @@ import sys
 import time
 from interface import interface
 from plot_result_optimization import plot_result
-from scipy.optimize import differential_evolution
+from modified_scipy.differentialevolution import differential_evolution
 
 
 def diffevo(iters, segments):
@@ -35,7 +35,7 @@ def diffevo(iters, segments):
     start_time = time.time()
 
     # Run the differential evolution algorithm
-    res = differential_evolution(
+    res, func_vals, runtimes_cumulative = differential_evolution(
                                                 interface,
                                                 bounds,
                                                 maxiter=iters,
@@ -45,8 +45,11 @@ def diffevo(iters, segments):
                                                 recombination = 0.7,
                                                 strategy = "best1bin")
 
+    print(func_vals, runtimes_cumulative)
+    func_vals = [-1 * score for score in func_vals]
     runtime = time.time() - start_time
-    return_list = [iters, runtime, -res.fun, res.x]
+    return_list = [iters, runtime, -res.fun, res.x, func_vals, runtimes_cumulative]
+
     return(return_list)
 
 
