@@ -14,7 +14,7 @@ def read_data():
     k0_list = []
     S_list = []
 
-    with open('samples/snyder_samples/regular_sample.csv', 'r') as file:
+    with open('samples/samples_tyteca/sample1.csv', 'r') as file:
         reader = csv.reader(file)
         next(reader)
         for row in reader:
