@@ -1,3 +1,4 @@
+import os
 import csv
 import sys
 import diffevo
@@ -26,6 +27,10 @@ def run_n_times(algorithm, segments, n, iters):
     filename = algorithm + "_" + str(segments) + "segments_sample1.csv"
     filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_sample1" + ".csv"
     filepath = "results/" + str(segments) + "segments/" + filename
+
+    if not os.path.exists("results/" + str(segments) + "segments/"):
+        os.makedirs("results/" + str(segments) + "segments/")
+
     filepath_runtime = "results/" + str(segments) + "segments/" + filename_runtime
 
 
