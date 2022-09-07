@@ -1,6 +1,6 @@
 import sys
 import time
-import pygad
+from modified_pygad import pygad
 from interface import interface_pygad
 from plot_result_optimization import plot_result
 
