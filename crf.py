@@ -105,7 +105,7 @@ def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_t
     :param max_time: int maximum allowed time
     :param min_res: float minimum required resolution
     :param max_res: float maximum required resolution
-    :return: score
+    :return: float score
     """
 
     N = len(retention_times)
@@ -139,3 +139,61 @@ def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_t
             return(0.8 * score)
 
     return(score)
+
+def tyteca_eq_11(retention_times, peak_widths, max_time=60, min_time=2, max_res=1.6, prefacs=[1,1,1]):
+    """
+    Implements the CRF defined in Tyteca 2014, 10.1016/J.CHROMA.2014.08.014, Category II-A, equation 11.
+
+    :param retention_times: ndarray containing retention_times
+    :param peak_widths: ndarray containing peak widths
+    :param max_time: int maximum allowed time
+    :param min_time: int minimum allowed time
+    :param max_res: float maximum required resolution
+    :param prefacs: prefactors that dictate importance of each term.
+    :return: float CRF score
+    """
+    N = len(retention_times)
+    nobs_term = N**prefacs[0]
+
+    resolutions = np.zeros(N)
+    for i in range(N - 1):
+        # check if tR1 is later then max_time, if yes we can stop
+        tR1 = retention_times[i]
+        tR2 = retention_times[i+1]
+        W1 = peak_widths[i]
+        W2 = peak_widths[i+1]
+
+        resolutions[i] = resolution(tR1, tR2, W1, W2)
+        if resolutions[i] > max_res:
+            resolutions[i] = max_res
+
+    res_term = resolutions.sum()
+    max_time_term = prefacs[1] + np.abs(max_time - np.max(retention_times))
+    min_time_term = prefacs[2] * (min_time-np.min(retention_times))
+
+    return nobs_term + res_term - max_time_term + min_time_term
+
+def tyteca_eq_24(retention_times, peak_widths, max_res=1.6):
+    """
+    Implements the CRF defined in Tyteca 2014, 10.1016/J.CHROMA.2014.08.014, Category I-B, equation 24.
+    :param retention_times: ndarray containing retention_times
+    :param peak_widths: ndarray containing peak widths
+    :param max_res: float maximum required resolution
+    :return: float CRF score
+    """
+    N = len(retention_times)
+
+    resolutions = np.zeros(N)
+    for i in range(N - 1):
+        # check if tR1 is later then max_time, if yes we can stop
+        tR1 = retention_times[i]
+        tR2 = retention_times[i+1]
+        W1 = peak_widths[i]
+        W2 = peak_widths[i+1]
+
+        resolutions[i] = resolution(tR1, tR2, W1, W2)
+        if resolutions[i] > max_res:
+            resolutions[i] = max_res
+        res_term = np.sum(resolutions)
+
+        return N + (res_term / (max_res*(N-1)))
