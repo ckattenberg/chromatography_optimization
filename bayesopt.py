@@ -50,7 +50,6 @@ def bayesopt(iters, segments):
 
     func_vals = [-1 * score for score in res.func_vals]
     return_list = [iters, runtime, -res.fun, list(res.x), func_vals, runtimes_cumulative]
-    print(return_list)
     return(return_list)
 
 
