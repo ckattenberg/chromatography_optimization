@@ -33,6 +33,7 @@ def bayesopt(iters, segments):
     for i in range(segments):
         bounds.append((0.1, 20.0))
 
+
     # Record starting time
     start_time = time.time()
 

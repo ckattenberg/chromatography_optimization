@@ -1,10 +1,11 @@
-from crf import crf
+import crf
 import retention_model
 import read_data as rd
 import math
 import numpy as np
 import chromatographic_response_funcions as of
 import globals
+import peak_and_width_detection as pwd
 
 
 # HPLC system parameters
@@ -37,6 +38,7 @@ def chromosome_to_lists(chromosome):
     return(phi_list, t_init, t_list)
 
 
+
 # Input has to be a numpy array
 def interface(chromosome):
     """
@@ -58,6 +60,7 @@ def interface(chromosome):
 
     """
 
+    #print("Did an evaluaton.")
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
 
     # Get lnk0 and S data
@@ -76,13 +79,26 @@ def interface(chromosome):
         tR_list.append(tR)
         W_list.append(W)
 
+    tlim = max(tR_list) + max(W_list)
+
+    if(globals.wet == True):
+        # Wet signal
+        x, signal = pwd.create_signal(np.array(tR_list), np.array(W_list), tlim)
+        tR_list, W_list = pwd.detect_peaks(x, signal, height_thresh=0, plot=False)
+
     # Calculate crf
-    score = crf(tR_list, W_list, phi_list)
+
+    if(globals.crf == "capped sum"):
+        score = crf.capped_sum_of_resolutions(np.array(tR_list), np.array(W_list), phi_list)
+    elif(globals.crf == "prod of res"):
+        score = crf.crf(tR_list, W_list, phi_list)
+
     return(-1 * score)
 
 
 # Input has to be a numpy array
 def interface_pygad(chromosome, solution_id):
+    #print("Did an evaluaton.")
     """
     This function serves as an interface between the genetic algorithm package
     and the CRF function. This is necessary because the gradient profile
@@ -122,5 +138,5 @@ def interface_pygad(chromosome, solution_id):
         W_list.append(W)
 
     # Calculate CRF (Change this line to choose a different CRF)
-    score = crf(tR_list, W_list, phi_list)
+    score = crf.crf(tR_list, W_list, phi_list)
     return(score)

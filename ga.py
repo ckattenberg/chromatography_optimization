@@ -61,9 +61,11 @@ def ga(iters, segments):
     runtime = time.time() - start_time
 
     solution, solution_fitness, solution_idx = ga_instance.best_solution()
-    return_list = [iters, runtime, solution_fitness, solution, ga_instance.best_solutions_fitness]
-    return(return_list)
+    runtime_per_iteration = ga_instance.runtimes
+    #A list holding the fitness values of the best solutions for all generations: ga_instance.best_solutions_fitness
+    return_list = [iters, runtime, solution_fitness, solution, ga_instance.best_solutions_fitness, runtime_per_iteration]
 
+    return return_list
 
 def main():
     if len(sys.argv) > 3:

@@ -1,6 +1,7 @@
 import csv
 import random
 import numpy as np
+import globals
 
 
 def read_data():
@@ -14,7 +15,9 @@ def read_data():
     k0_list = []
     S_list = []
 
-    with open('samples/samples_tyteca/sample1.csv', 'r') as file:
+    path = globals.path
+
+    with open(path, 'r') as file:
         reader = csv.reader(file)
         next(reader)
         for row in reader:
@@ -22,6 +25,6 @@ def read_data():
             S_list.append(float(row[1]))
 
     # Get the first 35 elements from each list. This is the sample.
-    k0_list = k0_list[:15]
-    S_list = S_list[:15]
+    k0_list = k0_list[:35]
+    S_list = S_list[:35]
     return(k0_list, S_list)

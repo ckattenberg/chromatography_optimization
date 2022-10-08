@@ -7,6 +7,7 @@ import ga
 import random_search
 import grid_search
 from tqdm import tqdm
+import globals
 
 
 def run_n_times(algorithm, segments, n, iters):
@@ -24,15 +25,19 @@ def run_n_times(algorithm, segments, n, iters):
     :segments: Number of gradient segments in the gradient profile.
     """
 
+    if(globals.wet == True):
+        prefix = "results/wet/"
+    else:
+        prefix = "results/dry/"
+
     filename = algorithm + "_" + str(segments) + "segments_sample1.csv"
     filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_sample1" + ".csv"
-    filepath = "results/" + str(segments) + "segments/" + filename
+    filepath = prefix + str(segments) + "segments/" + filename
 
-    if not os.path.exists("results/" + str(segments) + "segments/"):
-        os.makedirs("results/" + str(segments) + "segments/")
+    if not os.path.exists(prefix + str(segments) + "segments/"):
+        os.makedirs(prefix + str(segments) + "segments/")
 
-    filepath_runtime = "results/" + str(segments) + "segments/" + filename_runtime
-
+    filepath_runtime = prefix + str(segments) + "segments/" + filename_runtime
 
     if(algorithm == "BayesOpt"):
 

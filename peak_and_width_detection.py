@@ -114,4 +114,3 @@ if __name__ == "__main__":
 
     print(capped_sum_of_resolutions(tRs, widths_pred, [0, 0.5]))
     print(capped_sum_of_resolutions(peaks, widths, [0, 0.5]))
-
