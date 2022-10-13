@@ -19,7 +19,7 @@ def read_data():
     with open('globals.json') as json_file:
         variables = json.load(json_file)
 
-    sample_name = variables["sample_name"]
+    sample_name = str(variables["sample_name"])
 
     path = "samples/samples_tyteca/" + sample_name + ".csv"
 

@@ -28,8 +28,8 @@ def run_n_times(algorithm, segments, n, iters):
     with open('globals.json') as json_file:
         variables = json.load(json_file)
 
-    sample = variables["sample_name"]
-    wet = variables["wet"]
+    sample = str(variables["sample_name"])
+    wet = bool(variables["wet"])
 
     if(wet == True):
         prefix = "results/wet/"

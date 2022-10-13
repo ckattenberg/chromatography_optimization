@@ -62,9 +62,9 @@ def interface(chromosome):
     with open('globals.json') as json_file:
         variables = json.load(json_file)
 
-    crf_name = variables["crf_name"]
-    wet = variables["wet"]
-    alg = variables["algorithm"]
+    crf_name = str(variables["crf_name"])
+    wet = bool(variables["wet"])
+    alg = str(variables["algorithm"])
 
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
 
@@ -131,9 +131,9 @@ def interface_pygad(chromosome, solution_id):
     with open('globals.json') as json_file:
         variables = json.load(json_file)
 
-    crf_name = variables["crf_name"]
-    wet = variables["wet"]
-    alg = variables["algorithm"]
+    crf_name = str(variables["crf_name"])
+    wet = bool(variables["wet"])
+    alg = str(variables["algorithm"])
 
     #print("Did an evaluaton.")
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
