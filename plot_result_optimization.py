@@ -6,13 +6,15 @@ import retention_model
 import plot_chromatogram
 import globals
 
-"""Used to plot resulting chromatogram of single optimization run, straight from result_list."""
 t_0 = globals.t_0
 t_D = globals.t_D
 N = globals.N
 
+
 # Get chromatogram associated with result chromosome and plot them both.
 def plot_result(result_list):
+
+    """Used to plot resulting chromatogram of single optimization run, straight from result_list."""
 
     phi_list, t_init, t_list = chromosome_to_lists(result_list[3])
 

@@ -1,7 +1,7 @@
 import csv
+import json
 import random
 import numpy as np
-import globals
 
 
 def read_data():
@@ -12,10 +12,16 @@ def read_data():
     to be optimized.
 
     """
+
     k0_list = []
     S_list = []
 
-    path = globals.path
+    with open('globals.json') as json_file:
+        variables = json.load(json_file)
+
+    sample_name = variables["sample_name"]
+
+    path = "samples/samples_tyteca/" + sample_name + ".csv"
 
     with open(path, 'r') as file:
         reader = csv.reader(file)

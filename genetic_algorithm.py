@@ -7,6 +7,7 @@ import helper_functions as hf
 # If n is the number of segments, there are n + 1 phi values between 0 and 1,
 # 1 t_init value and n delta_t values.
 
+# Selection strategies
 
 def roulette_wheel_selection(population, population_fitness):
     # We need N parent pairs, where N is the population size? yes
@@ -23,6 +24,12 @@ def roulette_wheel_selection(population, population_fitness):
         parent2 = population[npr.choice(len(population), p=selection_probabilities)]
         parents.append([parent1, parent2])
     return(parents)
+
+def truncation_selection():
+    pass
+
+def tournament_selection():
+    pass
 
 
 def single_point_crossover(parents):
@@ -98,6 +105,8 @@ def ga(iterations, segments):
     # Which values need to be returned? in a list i think, see meta_experiment
     # Change this to keep track of best solution after each generation.
     return_list = [population[max_index], first_max_fitness]
+
+    # return_list = [iters, runtime, -res.fun, list(res.x), func_vals, runtimes_cumulative]
 
     print(return_list)
     return(return_list)

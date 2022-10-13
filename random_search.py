@@ -2,15 +2,9 @@ import sys
 import math
 import time
 import random
-import globals
 import interface
 import numpy as np
 from plot_result_optimization import plot_result
-
-
-t_0 = globals.t_0
-t_D = globals.t_D
-N = globals.N
 
 
 def run_rs(iters, segments):
@@ -29,6 +23,12 @@ def run_rs(iters, segments):
              cumulative runtime after each generation.
 
     """
+
+    import globals
+    t_0 = globals.t_0
+    t_D = globals.t_D
+    N = globals.N
+
     bounds = []
 
     # Add phi bounds

@@ -1,13 +1,14 @@
 import os
 import csv
 import sys
+import time
+import json
 import diffevo
 import bayesopt
 import ga
 import random_search
 import grid_search
 from tqdm import tqdm
-import globals
 
 
 def run_n_times(algorithm, segments, n, iters):
@@ -24,14 +25,19 @@ def run_n_times(algorithm, segments, n, iters):
                 BayesOpt/DiffEvo/GenAlgo/GridSearch/RandomSearch
     :segments: Number of gradient segments in the gradient profile.
     """
+    with open('globals.json') as json_file:
+        variables = json.load(json_file)
 
-    if(globals.wet == True):
+    sample = variables["sample_name"]
+    wet = variables["wet"]
+
+    if(wet == True):
         prefix = "results/wet/"
     else:
         prefix = "results/dry/"
 
-    filename = algorithm + "_" + str(segments) + "segments_sample1.csv"
-    filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_sample1" + ".csv"
+    filename = algorithm + "_" + str(segments) + "segments_" + sample + ".csv"
+    filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_" + sample + ".csv"
     filepath = prefix + str(segments) + "segments/" + filename
 
     if not os.path.exists(prefix + str(segments) + "segments/"):
@@ -140,22 +146,42 @@ def run_n_times(algorithm, segments, n, iters):
 
 
 def main():
-    if len(sys.argv) > 5:
+
+    if len(sys.argv) > 8:
         print('You have specified too many arguments.')
         sys.exit()
 
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 8:
         print('Please specify the following parameters in order:')
         print("- Choose an optimization algorithm (BayesOpt/DiffEvo/GenAlgo/GridSearch/RandomSearch)")
         print("- Number of segments in the gradient profile")
         print("- Number of sub-experiments the meta-experiment should consist of")
         print("- Number of iterations. Note that if the chosen algorithm is grid search, this is the number of grid points per dimension.")
+        print("- Name of the sample.")
+        print("- Wet? (True/False)")
+        print("- CRF name (prod_of_res/tyteca11/sum_of_res/tyteca24)")
         sys.exit()
 
     algorithm = sys.argv[1]
     number_of_segments = int(sys.argv[2])
     sub_experiments = int(sys.argv[3])
     iterations = int(sys.argv[4])
+    sample_name = sys.argv[5]
+    wet = sys.argv[6]
+    crf_name = sys.argv[7]
+
+    # Write variables to json file
+    variable_dict = {
+        "wet": wet,
+        "crf_name": crf_name,
+        "sample_name": sample_name,
+        "algorithm": algorithm
+    }
+
+    json_object = json.dumps(variable_dict, indent=4)
+
+    with open("globals.json", "w") as outfile:
+        outfile.write(json_object)
 
     run_n_times(algorithm, number_of_segments, sub_experiments, iterations)
 
