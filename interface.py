@@ -2,12 +2,12 @@ import crf
 import retention_model
 import read_data as rd
 import math
+import json
 import numpy as np
 import chromatographic_response_funcions as of
-import globals
 import peak_and_width_detection as pwd
 
-
+import globals
 # HPLC system parameters
 t_0 = globals.t_0
 t_D = globals.t_D
@@ -59,8 +59,15 @@ def interface(chromosome):
              profile.
 
     """
+    with open('globals.json') as json_file:
+        variables = json.load(json_file)
 
-    #print("Did an evaluaton.")
+    crf_name = variables["crf_name"]
+    wet = variables["wet"]
+    alg = variables["algorithm"]
+
+
+    print("Did an evaluaton.")
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
 
     # Get lnk0 and S data
@@ -81,17 +88,21 @@ def interface(chromosome):
 
     tlim = max(tR_list) + max(W_list)
 
-    if(globals.wet == True):
+    if(wet == True):
         # Wet signal
         x, signal = pwd.create_signal(np.array(tR_list), np.array(W_list), tlim)
         tR_list, W_list = pwd.detect_peaks(x, signal, height_thresh=0, plot=False)
 
     # Calculate crf
 
-    if(globals.crf == "capped sum"):
+    if(crf_name == "sum_of_res"):
         score = crf.capped_sum_of_resolutions(np.array(tR_list), np.array(W_list), phi_list)
-    elif(globals.crf == "prod of res"):
+    elif(crf_name == "prod_of_res"):
         score = crf.crf(tR_list, W_list, phi_list)
+    elif(crf_name == "tyteca11"):
+        score = crf.tyteca_eq_11(np.array(tR_list), np.array(W_list))
+    elif(crf_name == "tyteca24"):
+        score = crf.tyteca_eq_24(np.array(tR_list), np.array(W_list))
 
     return(-1 * score)
 
@@ -118,7 +129,16 @@ def interface_pygad(chromosome, solution_id):
              profile.
 
     """
+    print("Did an evaluaton.")
 
+    with open('globals.json') as json_file:
+        variables = json.load(json_file)
+
+    crf_name = variables["crf_name"]
+    wet = variables["wet"]
+    alg = variables["algorithm"]
+
+    #print("Did an evaluaton.")
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
 
     # Get lnk0 and S data
@@ -137,6 +157,22 @@ def interface_pygad(chromosome, solution_id):
         tR_list.append(tR)
         W_list.append(W)
 
-    # Calculate CRF (Change this line to choose a different CRF)
-    score = crf.crf(tR_list, W_list, phi_list)
+    tlim = max(tR_list) + max(W_list)
+
+    if(wet == True):
+        # Wet signal
+        x, signal = pwd.create_signal(np.array(tR_list), np.array(W_list), tlim)
+        tR_list, W_list = pwd.detect_peaks(x, signal, height_thresh=0, plot=False)
+
+    # Calculate crf
+
+    if(crf_name == "sum_of_res"):
+        score = crf.capped_sum_of_resolutions(np.array(tR_list), np.array(W_list), phi_list)
+    elif(crf_name == "prod_of_res"):
+        score = crf.crf(tR_list, W_list, phi_list)
+    elif(crf_name == "tyteca11"):
+        score = crf.tyteca_eq_11(np.array(tR_list), np.array(W_list))
+    elif(crf_name == "tyteca24"):
+        score = crf.tyteca_eq_24(np.array(tR_list), np.array(W_list))
+
     return(score)
