@@ -66,8 +66,6 @@ def interface(chromosome):
     wet = variables["wet"]
     alg = variables["algorithm"]
 
-
-    print("Did an evaluaton.")
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
 
     # Get lnk0 and S data
@@ -129,7 +127,6 @@ def interface_pygad(chromosome, solution_id):
              profile.
 
     """
-    print("Did an evaluaton.")
 
     with open('globals.json') as json_file:
         variables = json.load(json_file)
