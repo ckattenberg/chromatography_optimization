@@ -37,15 +37,16 @@ def run_n_times(algorithm, segments, n, iters):
     else:
         prefix = "results/dry/" + crf_name + "/" + str(segments) + "segments/"
 
-    filename = algorithm + "_" + str(segments) + "segments_" + sample + ".csv"
-    filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_" + sample + ".csv"
-    filename_solution = algorithm + "_" + str(segments) + "segments" + "_solution_" + sample + ".csv"
-    filepath = prefix + filename
+    filename_score = algorithm +"_score_" + sample + ".csv"
+    filename_runtime = algorithm + "_runtime_" + sample + ".csv"
+    filename_solution = algorithm + "_solution_" + sample + ".csv"
 
-    if not os.path.exists(prefix + str(segments) + "segments/"):
-        os.makedirs(prefix + str(segments) + "segments/")
+    if not os.path.exists(prefix):
+        os.makedirs(prefix)
 
-    filepath_runtime = prefix + str(segments) + "segments/" + filename_runtime
+    filepath_score = prefix + filename_score
+    filepath_runtime = prefix + filename_runtime
+    filepath_solution = prefix + filename_solution
 
     if(algorithm == "BayesOpt"):
 
@@ -57,7 +58,7 @@ def run_n_times(algorithm, segments, n, iters):
             runtime_per_iteration = return_list[5]
             # write the data from the list to a (csv?) file as a single line
 
-            f = open(filepath, 'a', newline ='\n')
+            f = open(filepath_score, 'a', newline ='\n')
 
             # writing the data into the file
             with f:
