@@ -33,13 +33,13 @@ def run_n_times(algorithm, segments, n, iters):
     crf_name = str(variables["crf_name"])
 
     if(wet == True):
-        prefix = "results/wet/" + crf_name + "/" + str(segments) + "segments/"
+        prefix = "results/wet/" + crf_name + "/" + str(segments) + "segments/" + sample + "/" + algorithm + "/"
     else:
-        prefix = "results/dry/" + crf_name + "/" + str(segments) + "segments/"
+        prefix = "results/dry/" + crf_name + "/" + str(segments) + "segments/" + sample + "/" + algorithm + "/"
 
-    filename_score = algorithm +"_score_" + sample + ".csv"
-    filename_runtime = algorithm + "_runtime_" + sample + ".csv"
-    filename_solution = algorithm + "_solution_" + sample + ".csv"
+    filename_score = "score" + ".csv"
+    filename_runtime = "runtime" + ".csv"
+    filename_solution = "solution" + ".csv"
 
     if not os.path.exists(prefix):
         os.makedirs(prefix)
