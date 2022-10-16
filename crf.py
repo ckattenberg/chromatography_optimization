@@ -109,6 +109,9 @@ def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_t
 
     N = len(retention_times)
 
+    if N < 2:
+        return max_res
+
     resolutions = np.zeros(len(retention_times))
 
     mask = retention_times < max_time
@@ -151,6 +154,10 @@ def tyteca_eq_11(retention_times, peak_widths, max_time=60, min_time=2, max_res=
     :return: float CRF score
     """
     N = len(retention_times)
+
+    if N < 2:
+        return max_res
+
     nobs_term = N**prefacs[0]
 
     resolutions = np.zeros(N)
@@ -180,6 +187,9 @@ def tyteca_eq_24(retention_times, peak_widths, max_res=1.6):
     :return: float CRF score
     """
     N = len(retention_times)
+
+    if N < 2:
+        return max_res
 
     resolutions = np.zeros(N)
     for i in range(N - 1):
