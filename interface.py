@@ -92,10 +92,6 @@ def interface(chromosome):
         tR_list, W_list = pwd.detect_peaks(x, signal, height_thresh=0, plot=False)
 
     # Calculate crf
-
-    print(crf_name)
-    print(tR_list, W_list, phi_list)
-
     if(crf_name == "sum_of_res"):
         score = crf.capped_sum_of_resolutions(np.array(tR_list), np.array(W_list), phi_list)
     elif(crf_name == "prod_of_res"):
