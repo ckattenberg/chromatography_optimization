@@ -35,9 +35,7 @@ def run_n_times(algorithm, segments, n, iters):
     if(wet == True):
         prefix = "results/wet/" + crf_name + "/"
     else:
-        prefix = "results/dry/"
-
-    print(prefix)
+        prefix = "results/dry/" + crf_name + "/"
 
     filename = algorithm + "_" + str(segments) + "segments_" + sample + ".csv"
     filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_" + sample + ".csv"
