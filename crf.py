@@ -88,8 +88,8 @@ def crf(retention_times, peak_widths, phi_list):
 
     # Optional penalty for gradient segments with negative slope
     # Comment out to remove penalty:
-    if(sorted(phi_list) != phi_list):
-        return(0.8 * score)
+    #if(sorted(phi_list) != phi_list):
+        #return(0.8 * score)
 
     return(score)
 
