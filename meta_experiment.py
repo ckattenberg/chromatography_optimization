@@ -33,13 +33,14 @@ def run_n_times(algorithm, segments, n, iters):
     crf_name = str(variables["crf_name"])
 
     if(wet == True):
-        prefix = "results/wet/" + crf_name + "/"
+        prefix = "results/wet/" + crf_name + "/" + str(segments) + "segments/"
     else:
-        prefix = "results/dry/" + crf_name + "/"
+        prefix = "results/dry/" + crf_name + "/" + str(segments) + "segments/"
 
     filename = algorithm + "_" + str(segments) + "segments_" + sample + ".csv"
     filename_runtime = algorithm + "_" + str(segments) + "segments" + "_runtime_" + sample + ".csv"
-    filepath = prefix + str(segments) + "segments/" + filename
+    filename_solution = algorithm + "_" + str(segments) + "segments" + "_solution_" + sample + ".csv"
+    filepath = prefix + filename
 
     if not os.path.exists(prefix + str(segments) + "segments/"):
         os.makedirs(prefix + str(segments) + "segments/")
@@ -51,9 +52,11 @@ def run_n_times(algorithm, segments, n, iters):
         for nth_experiment in tqdm(range(n)):
             # n = number of meta experiments
             return_list = bayesopt.bayesopt(iters, segments)
+            best_solution = return_list[3]
             func_vals = return_list[4]
             runtime_per_iteration = return_list[5]
             # write the data from the list to a (csv?) file as a single line
+
             f = open(filepath, 'a', newline ='\n')
 
             # writing the data into the file
@@ -67,6 +70,14 @@ def run_n_times(algorithm, segments, n, iters):
             with f:
                 writer = csv.writer(f)
                 writer.writerow(runtime_per_iteration)
+
+            f = open(filepath_solution, 'a', newline ='\n')
+
+            # writing the data into the file
+            with f:
+                writer = csv.writer(f)
+                writer.writerow(best_solution)
+
 
     elif(algorithm == "DiffEvo"):
 
