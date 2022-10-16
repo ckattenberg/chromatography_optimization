@@ -29,10 +29,10 @@ def run_n_times(algorithm, segments, n, iters):
         variables = json.load(json_file)
 
     sample = str(variables["sample_name"])
-    wet = bool(variables["wet"])
+    wet = str(variables["wet"])
     crf_name = str(variables["crf_name"])
 
-    if(wet == True):
+    if(wet == "True"):
         prefix = "results/wet/" + crf_name + "/" + str(segments) + "segments/" + sample + "/" + algorithm + "/"
     else:
         prefix = "results/dry/" + crf_name + "/" + str(segments) + "segments/" + sample + "/" + algorithm + "/"
