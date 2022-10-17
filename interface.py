@@ -63,7 +63,7 @@ def interface(chromosome):
         variables = json.load(json_file)
 
     crf_name = str(variables["crf_name"])
-    wet = bool(variables["wet"])
+    wet = str(variables["wet"])
     alg = str(variables["algorithm"])
 
     phi_list, t_init, t_list = chromosome_to_lists(chromosome)
@@ -86,7 +86,7 @@ def interface(chromosome):
 
     tlim = max(tR_list) + max(W_list)
 
-    if(wet == True):
+    if(wet == "True"):
         # Wet signal
         x, signal = pwd.create_signal(np.array(tR_list), np.array(W_list), tlim)
         tR_list, W_list = pwd.detect_peaks(x, signal, height_thresh=0, plot=False)
