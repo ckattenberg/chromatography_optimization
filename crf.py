@@ -43,8 +43,7 @@ def crf(retention_times, peak_widths, phi_list):
     Return CRF score for a chromatogram characterized by a list of retention
     times and a corresponding list of peak widths.
     """
-
-    N = len(retention_times)
+    n_peaks = len(retention_times)
 
     # Parameters sigmoidal transformations
     b0 = 3.93
@@ -61,7 +60,7 @@ def crf(retention_times, peak_widths, phi_list):
     prod_S = 1
 
     # Loop over all neighboring peak pairs and get S. Multiply together.
-    for i in range(N - 1):
+    for i in range(n_peaks - 1):
         tR1 = retention_times[i]
         tR2 = retention_times[i+1]
         W1 = peak_widths[i]
@@ -75,7 +74,7 @@ def crf(retention_times, peak_widths, phi_list):
         resolutions.append(R)
 
     # Create f and g
-    f = prod_S ** (1/(N-1))
+    f = prod_S ** (1/(n_peaks-1))
 
     # Get T
     tR_last = retention_times[-1]
@@ -106,16 +105,15 @@ def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_t
     :param max_res: float maximum required resolution
     :return: float score
     """
+    n_peaks = len(retention_times)
 
-    N = len(retention_times)
-
-    if N < 2:
+    if n_peaks < 2:
         return max_res
 
     resolutions = np.zeros(len(retention_times))
 
     mask = retention_times < max_time
-    for i in range(N - 1):
+    for i in range(n_peaks - 1):
         # check if tR1 is later then max_time, if yes we can stop
         tR1 = retention_times[i]
         tR2 = retention_times[i+1]
@@ -136,9 +134,9 @@ def capped_sum_of_resolutions(retention_times, peak_widths, phi_list=None, max_t
     score = resolutions.sum()
     # Optional penalty for gradient segments with negative slope
     # Comment out to remove penalty:
-    if phi_list is not None:
-        if(sorted(phi_list) != phi_list):
-            return(0.8 * score)
+    #if phi_list is not None:
+        #if(sorted(phi_list) != phi_list):
+            #return(0.8 * score)
 
     return(score)
 
@@ -153,15 +151,15 @@ def tyteca_eq_11(retention_times, peak_widths, max_time=60, min_time=2, max_res=
     :param prefacs: prefactors that dictate importance of each term.
     :return: float CRF score
     """
-    N = len(retention_times)
+    n_peaks = len(retention_times)
 
-    if N < 2:
+    if n_peaks < 2:
         return max_res
 
-    nobs_term = N**prefacs[0]
+    nobs_term = n_peaks**prefacs[0]
 
-    resolutions = np.zeros(N)
-    for i in range(N - 1):
+    resolutions = np.zeros(n_peaks)
+    for i in range(n_peaks - 1):
         # check if tR1 is later then max_time, if yes we can stop
         tR1 = retention_times[i]
         tR2 = retention_times[i+1]
@@ -186,13 +184,13 @@ def tyteca_eq_24(retention_times, peak_widths, max_res=1.6):
     :param max_res: float maximum required resolution
     :return: float CRF score
     """
-    N = len(retention_times)
+    n_peaks = len(retention_times)
 
-    if N < 2:
+    if n_peaks < 2:
         return max_res
 
-    resolutions = np.zeros(N)
-    for i in range(N - 1):
+    resolutions = np.zeros(n_peaks)
+    for i in range(n_peaks - 1):
         # check if tR1 is later then max_time, if yes we can stop
         tR1 = retention_times[i]
         tR2 = retention_times[i+1]
@@ -204,4 +202,4 @@ def tyteca_eq_24(retention_times, peak_widths, max_res=1.6):
             resolutions[i] = max_res
         res_term = np.sum(resolutions)
 
-        return N + (res_term / (max_res*(N-1)))
+        return n_peaks + (res_term / (max_res*(n_peaks-1)))
