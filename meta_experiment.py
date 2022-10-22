@@ -85,10 +85,11 @@ def run_n_times(algorithm, segments, n, iters):
         for nth_experiment in tqdm(range(n)):
             # n = number of meta experiments
             return_list = diffevo.diffevo(iters, segments)
-
+            best_solution = return_list[3]
             func_vals = return_list[4]
             runtime_per_iteration = return_list[5]
-            f = open(filepath, 'a', newline ='\n')
+
+            f = open(filepath_score, 'a', newline ='\n')
 
             with f:
                 writer = csv.writer(f)
@@ -100,6 +101,13 @@ def run_n_times(algorithm, segments, n, iters):
                 writer = csv.writer(f)
                 writer.writerow(runtime_per_iteration)
 
+            f = open(filepath_solution, 'a', newline ='\n')
+
+            # writing the data into the file
+            with f:
+                writer = csv.writer(f)
+                writer.writerow(best_solution)
+
 
     elif(algorithm == "GenAlgo"):
 
@@ -107,7 +115,8 @@ def run_n_times(algorithm, segments, n, iters):
             return_list = ga.ga(iters, segments)
             func_vals = return_list[4]
             runtime_per_iteration = return_list[5]
-            f = open(filepath, 'a', newline ='\n')
+
+            f = open(filepath_score, 'a', newline ='\n')
 
             with f:
                 writer = csv.writer(f)

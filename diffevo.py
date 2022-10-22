@@ -45,7 +45,6 @@ def diffevo(iters, segments):
                                                 recombination = 0.7,
                                                 strategy = "best1bin")
 
-    print(func_vals, runtimes_cumulative)
     func_vals = [-1 * score for score in func_vals]
     runtime = time.time() - start_time
     return_list = [iters, runtime, -res.fun, res.x, func_vals, runtimes_cumulative]
