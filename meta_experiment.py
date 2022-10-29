@@ -113,6 +113,7 @@ def run_n_times(algorithm, segments, n, iters):
 
         for nth_experiment in tqdm(range(n)):
             return_list = ga.ga(iters, segments)
+            best_solution = return_list[3]
             func_vals = return_list[4]
             runtime_per_iteration = return_list[5]
 
@@ -128,6 +129,12 @@ def run_n_times(algorithm, segments, n, iters):
                 writer = csv.writer(f)
                 writer.writerow(runtime_per_iteration)
 
+            f = open(filepath_solution, 'a', newline ='\n')
+
+            # writing the data into the file
+            with f:
+                writer = csv.writer(f)
+                writer.writerow(best_solution)
 
 
     elif(algorithm == "RandomSearch"):
@@ -135,9 +142,11 @@ def run_n_times(algorithm, segments, n, iters):
         for nth_experiment in tqdm(range(n)):
             # n = number of meta experiments
             return_list = random_search.run_rs(iters, segments)
+            best_solution = return_list[3]
             func_vals = return_list[4]
             runtime_per_iteration = return_list[5]
-            f = open(filepath, 'a', newline ='\n')
+
+            f = open(filepath_score, 'a', newline ='\n')
 
             with f:
                 writer = csv.writer(f)
@@ -148,6 +157,14 @@ def run_n_times(algorithm, segments, n, iters):
             with f:
                 writer = csv.writer(f)
                 writer.writerow(runtime_per_iteration)
+
+            f = open(filepath_solution, 'a', newline ='\n')
+
+            # writing the data into the file
+            with f:
+                writer = csv.writer(f)
+                writer.writerow(best_solution)
+
 
     elif(algorithm == "GridSearch"):
 
