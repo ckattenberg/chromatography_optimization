@@ -586,7 +586,7 @@ class DifferentialEvolutionSolver:
         self.maxiter = maxiter
         if maxfun is None:  # the default used to be None
             maxfun = np.inf
-        self.maxfun = 10*maxiter
+        self.maxfun = maxfun
 
         # population is scaled to between [0, 1].
         # We have to scale between parameter <-> population
