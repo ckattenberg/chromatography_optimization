@@ -603,7 +603,12 @@ class DifferentialEvolutionSolver:
         # there are other population initializations possible.
         # the minimum is 5 because 'best2bin' requires a population that's at
         # least 5 long
-        self.num_population_members = max(5, popsize * self.parameter_count)
+
+        # What is going on here? why is population so large?
+        #self.num_population_members = max(5, popsize * self.parameter_count)
+        # Celine
+        self.num_population_members = max(5, popsize)
+        print("Number of population members", self.num_population_members)
         self.population_shape = (self.num_population_members,
                                  self.parameter_count)
 
@@ -742,6 +747,8 @@ class DifferentialEvolutionSolver:
         rng = self.random_number_generator
         self.population = rng.uniform(size=self.population_shape)
 
+        # Celine
+        print("Population", self.population)
         # reset population energies
         self.population_energies = np.full(self.num_population_members,
                                            np.inf)
@@ -1152,6 +1159,7 @@ class DifferentialEvolutionSolver:
                 self._calculate_population_energies(
                     self.population[self.feasible]))
 
+
             self._promote_lowest_energy()
 
         if self.dither is not None:
@@ -1250,6 +1258,7 @@ class DifferentialEvolutionSolver:
             # make sure the best solution is updated if updating='deferred'.
             # put the lowest energy into the best solution position.
             self._promote_lowest_energy()
+        print("energies", self.population_energies)
 
         return self.x, self.population_energies[0]
 
