@@ -586,7 +586,7 @@ class DifferentialEvolutionSolver:
         self.maxiter = maxiter
         if maxfun is None:  # the default used to be None
             maxfun = np.inf
-        self.maxfun = maxfun
+        self.maxfun = 10*maxiter
 
         # population is scaled to between [0, 1].
         # We have to scale between parameter <-> population
@@ -733,6 +733,7 @@ class DifferentialEvolutionSolver:
         # reset number of function evaluations counter
         self._nfev = 0
 
+    # Celine initialize population randomly
     def init_population_random(self):
         """
         Initializes the population at random. This type of initialization
@@ -855,6 +856,7 @@ class DifferentialEvolutionSolver:
 
         # do the optimization.
         for nit in range(1, self.maxiter + 1):
+            print(nit)
 
             start_time = time.time()
             # evolve the population by a generation
