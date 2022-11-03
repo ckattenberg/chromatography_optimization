@@ -835,6 +835,7 @@ class DifferentialEvolutionSolver:
             was employed, and a lower minimum was obtained by the polishing,
             then OptimizeResult also contains the ``jac`` attribute.
         """
+        print("starting solver")
         nit, warning_flag = 0, False
         status_message = _status_message['success']
 
@@ -852,9 +853,14 @@ class DifferentialEvolutionSolver:
                 self._calculate_population_energies(
                     self.population[self.feasible]))
 
+            print(self.population_energies)
+
             self._promote_lowest_energy()
 
         best_solution_per_iteration = []
+
+        # Celine: added this (add best of random initial 10)
+        best_solution_per_iteration.append(self.population_energies[0])
 
         # Celine: added runtime per iteration
         runtime_per_iteration = []
