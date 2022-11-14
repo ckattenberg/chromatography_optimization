@@ -171,7 +171,9 @@ def run_n_times(algorithm, segments, n, iters):
         return_list = grid_search.grid_search(iters, segments)
         func_val = return_list[2]
         runtime = return_list[1]
-        f = open(filepath, 'a', newline ='\n')
+        best_solution = return_list[3]
+
+        f = open(filepath_score, 'a', newline ='\n')
 
         with f:
             writer = csv.writer(f)
@@ -182,6 +184,14 @@ def run_n_times(algorithm, segments, n, iters):
         with f:
             writer = csv.writer(f)
             writer.writerow([runtime])
+
+        f = open(filepath_solution, 'a', newline ='\n')
+
+        # writing the data into the file
+        with f:
+            writer = csv.writer(f)
+            writer.writerow(best_solution)
+
 
 
 def main():
