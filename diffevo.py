@@ -42,7 +42,7 @@ def diffevo(iters, segments):
                                                 polish=False,
                                                 init="random",
                                                 popsize=10,
-                                                recombination = 0.7,
+                                                recombination = 0.5,
                                                 strategy = "best1bin")
 
     func_vals = [-1 * score for score in func_vals]
